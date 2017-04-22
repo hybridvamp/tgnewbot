@@ -77,17 +77,25 @@ def help(bot, update):
 	bot.sendMessage(chat_id=update.message.chat_id,
 				text="@" + update.message.from_user.username + ", here is some help for you.\n/build,\n/upload,\n/derp,\n/pizzaplz, and\n/help for this menu.")
 
+def lazy(bot, update):
+	bot.sendChatAction(chat_id=update.message.chat_id,
+						action=ChatAction.TYPING)
+	bot.sendMessage(chat_id=update.message.chat_id,
+						text="@" +  update.message.from_user.username + " is too lazy to do whatever he/she was told to do!")
+
 buildHandler = CommandHandler('build', build)
 uploadHandler = CommandHandler('upload', upload)
 derpHandler = CommandHandler('derp', derp)
 pizzaHandler = CommandHandler('pizzaplz', pizza)
 helpHandler = CommandHandler('help', help)
+lazyHandler = CommandHandler('lazyaf', lazy)
 
 dispatcher.add_handler(buildHandler)
 dispatcher.add_handler(uploadHandler)
 dispatcher.add_handler(derpHandler)
 dispatcher.add_handler(pizzaHandler)
 dispatcher.add_handler(helpHandler)
+dispatcher.add_handler(lazyHandler)
 
 updater.start_polling()
 updater.idle()
