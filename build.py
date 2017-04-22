@@ -66,6 +66,12 @@ def derp(bot, update):
 	bot.sendMessage(chat_id=update.message.chat_id,
 					text="Staph durpeeng")
 
+def pizza(bot, update):
+	bot.sendChatAction(chat_id=update.message.chat_id,
+						action=ChatAction.TYPING)
+	bot.sendMessage(chat_id=update.message.chat_id,
+					text="@akhilnarang, stop eating so much pizza")
+
 def kick(bot, update):
 	if update.message.from_user.id not in sudo_users:
 		bot.sendMessage(update.message.chat_id,
@@ -78,12 +84,14 @@ buildHandler = CommandHandler('build', build)
 uploadHandler = CommandHandler('upload', upload)
 derpHandler = CommandHandler('derp', derp)
 kickHandler = CommandHandler('kick', kick)
+pizzaHandler = CommandHandler('pizza', pizza)
 
 
 dispatcher.add_handler(buildHandler)
 dispatcher.add_handler(uploadHandler)
 dispatcher.add_handler(derpHandler)
 dispatcher.add_handler(kickHandler)
+dispatcher.add_handler(pizzaHandler)
 
 updater.start_polling()
 updater.idle()
