@@ -58,12 +58,12 @@ def upload(bot, update):
         sendNotAuthorizedMessage(bot,update)
 
 def restart(bot, update):
-    if update.message.from_user.id in sudo_users:
+    if isAuthorized(update):
          bot.sendMessage(update.message.chat_id, "Bot is restarting...")
          time.sleep(0.2)
          os.execl(sys.executable, sys.executable, *sys.argv)
-     else:
-         bot.sendMessage(update.message.chat_id, "Ummm, nope.")
+    else:
+         sendNotAuthorizedMessage()
 
 
 def sendNotAuthorizedMessage(bot, update):
@@ -88,7 +88,7 @@ def help(bot, update):
 	bot.sendChatAction(chat_id=update.message.chat_id,
 						action=ChatAction.TYPING)
 	bot.sendMessage(chat_id=update.message.chat_id,
-				text="@" + update.message.from_user.username + ", here is some help for you.\n/build,\n/upload,\n/derp,\n/pizzaplz, and\n/help for this menu.")
+				text="@" + update.message.from_user.username + ", here is some help for you.\n/build,\n/upload,\n/derp,\n/pizzaplz,\n/mml,\n/lazyaf,\n/restart, and\n/help for this menu.")
 
 def lazy(bot, update):
 	bot.sendChatAction(chat_id=update.message.chat_id,
