@@ -60,20 +60,30 @@ def sendNotAuthorizedMessage(bot, update):
     bot.sendMessage(chat_id=update.message.chat_id,
                     text="You aren't authorized for this lulz")
 
-def meh(bot, update):
+def derp(bot, update):
 	bot.sendChatAction(chat_id=update.message.chat_id,
 						action=ChatAction.TYPING)
 	bot.sendMessage(chat_id=update.message.chat_id,
 					text="Staph durpeeng")
 
+def kick(bot, update):
+	if update.message.from_user.id not in sudo_users:
+		bot.sendMessage(update.message.chat_id,
+						text="y u wanna kick him :(")
+	else:
+		bot.sendMessage(update.message.chat_id,
+						text="Someone gib Akhil pizza and I'll do it")
 
-build_handler = CommandHandler('build', build)
-upload_handler = CommandHandler('upload', upload)
-mehHandler = CommandHandler('derp', meh)
+buildHandler = CommandHandler('build', build)
+uploadHandler = CommandHandler('upload', upload)
+derpHandler = CommandHandler('derp', derp)
+kickHandler = CommandHandler('kick', kick)
 
-dispatcher.add_handler(build_handler)
-dispatcher.add_handler(upload_handler)
-dispatcher.add_handler(mehHandler)
+
+dispatcher.add_handler(buildHandler)
+dispatcher.add_handler(uploadHandler)
+dispatcher.add_handler(derpHandler)
+dispatcher.add_handler(kickHandler)
 
 updater.start_polling()
 updater.idle()
