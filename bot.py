@@ -22,7 +22,6 @@ path = config['PATH']['path']
 sudo_users = json.loads(config['ADMIN']['sudo'])
 dispatcher = updater.dispatcher
 
-
 def build(bot, update):
     if update.message.from_user.id in sudo_users:
         bot.sendChatAction(chat_id=update.message.chat_id,
@@ -64,34 +63,31 @@ def derp(bot, update):
 	bot.sendChatAction(chat_id=update.message.chat_id,
 						action=ChatAction.TYPING)
 	bot.sendMessage(chat_id=update.message.chat_id,
-					text="Staph durpeeng")
+					text="@" + update.message.from_user.username + " staph durpeeng")
 
 def pizza(bot, update):
 	bot.sendChatAction(chat_id=update.message.chat_id,
 						action=ChatAction.TYPING)
 	bot.sendMessage(chat_id=update.message.chat_id,
-					text="@akhilnarang, stop eating so much pizza")
+				text="Somone give @" + update.message.from_user.username + " pizza pl0x")
 
-def kick(bot, update):
-	if update.message.from_user.id not in sudo_users:
-		bot.sendMessage(update.message.chat_id,
-						text="y u wanna kick him :(")
-	else:
-		bot.sendMessage(update.message.chat_id,
-						text="Someone gib Akhil pizza and I'll do it")
+def help(bot, update):
+	bot.sendChatAction(chat_id=update.message.chat_id,
+						action=ChatAction.TYPING)
+	bot.sendMessage(chat_id=update.message.chat_id,
+				text="@" + update.message.from_user.username + ", here is some help for you.\n/build,\n/upload,\n/derp,\n/pizzaplz, and\n/help for this menu.")
 
 buildHandler = CommandHandler('build', build)
 uploadHandler = CommandHandler('upload', upload)
 derpHandler = CommandHandler('derp', derp)
-kickHandler = CommandHandler('kick', kick)
-pizzaHandler = CommandHandler('pizza', pizza)
-
+pizzaHandler = CommandHandler('pizzaplz', pizza)
+helpHandler = CommandHandler('help', help)
 
 dispatcher.add_handler(buildHandler)
 dispatcher.add_handler(uploadHandler)
 dispatcher.add_handler(derpHandler)
-dispatcher.add_handler(kickHandler)
 dispatcher.add_handler(pizzaHandler)
+dispatcher.add_handler(helpHandler)
 
 updater.start_polling()
 updater.idle()
