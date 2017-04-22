@@ -23,7 +23,7 @@ sudo_users = json.loads(config['ADMIN']['sudo'])
 dispatcher = updater.dispatcher
 
 def build(bot, update):
-    if update.message.from_user.id in sudo_users:
+    if isAuthorized(update):
         bot.sendChatAction(chat_id=update.message.chat_id,
                            action=ChatAction.TYPING)
         bot.sendMessage(chat_id=update.message.chat_id,
@@ -41,7 +41,7 @@ def build(bot, update):
         sendNotAuthorizedMessage(bot, update)
 
 def upload(bot, update):
-    if update.message.from_user.id in sudo_users:
+    if isAuthorized(update):
         bot.sendChatAction(chat_id=update.message.chat_id,
                             action=ChatAction.TYPING)
         bot.sendMessage(chat_id=update.message.chat_id,
@@ -88,6 +88,9 @@ def mml(bot, update):
 						action=ChatAction.TYPING)
 	bot.sendMessage(chat_id=update.message.chat_id,
 						text="No u @" + update.message.from_user.username)
+
+def isAuthorized(update):
+	return update.message.from_user.id in sudo_users
 
 buildHandler = CommandHandler('build', build)
 uploadHandler = CommandHandler('upload', upload)
