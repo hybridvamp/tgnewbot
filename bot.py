@@ -57,7 +57,7 @@ def sendNotAuthorizedMessage(bot, update):
     bot.sendChatAction(chat_id=update.message.chat_id,
                         action=ChatAction.TYPING)
     bot.sendMessage(chat_id=update.message.chat_id,
-                    text="You aren't authorized for this lulz")
+                    text="You aren't authorized for this lulz @" + update.message.from_user.username)
 
 def derp(bot, update):
 	bot.sendChatAction(chat_id=update.message.chat_id,
