@@ -65,6 +65,14 @@ def restart(bot, update):
     else:
          sendNotAuthorizedMessage()
 
+def leave(bot, update):
+	if isAuthorized(update):
+		bot.sendChatAction(update.message.chat_id, ChatAction.TYPING)
+		bot.sendMessage(update.message.chat_id, "Goodbye!")
+		bot.leaveChat(update.message.chat_id)
+	else:
+		sendNotAuthorizedMessage(bot, update)
+
 
 def sendNotAuthorizedMessage(bot, update):
     bot.sendChatAction(chat_id=update.message.chat_id,
@@ -88,7 +96,7 @@ def help(bot, update):
 	bot.sendChatAction(chat_id=update.message.chat_id,
 						action=ChatAction.TYPING)
 	bot.sendMessage(chat_id=update.message.chat_id,
-				text="@" + update.message.from_user.username + ", here is some help for you.\n/build,\n/upload,\n/derp,\n/pizzaplz,\n/mml,\n/lazyaf,\n/restart, and\n/help for this menu.")
+				text="@" + update.message.from_user.username + ", here is some help for you.\n/build,\n/upload,\n/derp,\n/pizzaplz,\n/mml,\n/lazyaf,\n/restart,\n/leave, and\n/help for this menu.")
 
 def lazy(bot, update):
 	bot.sendChatAction(chat_id=update.message.chat_id,
@@ -108,6 +116,7 @@ def isAuthorized(update):
 buildHandler = CommandHandler('build', build)
 uploadHandler = CommandHandler('upload', upload)
 restartHandler = CommandHandler('restart', restart)
+leaveHandler = CommandHandler('leave', leave)
 derpHandler = CommandHandler('derp', derp)
 pizzaHandler = CommandHandler('pizzaplz', pizza)
 helpHandler = CommandHandler('help', help)
@@ -117,6 +126,7 @@ mmlHandler = CommandHandler('mml', mml)
 dispatcher.add_handler(buildHandler)
 dispatcher.add_handler(uploadHandler)
 dispatcher.add_handler(restartHandler)
+dispatcher.add_handler(leaveHandler)
 dispatcher.add_handler(derpHandler)
 dispatcher.add_handler(pizzaHandler)
 dispatcher.add_handler(helpHandler)
