@@ -6,6 +6,10 @@ import logging
 import os
 import subprocess
 
+import time
+
+import sys
+
 from telegram import ChatAction
 from telegram.ext import CommandHandler
 from telegram.ext import Updater
@@ -53,6 +57,15 @@ def upload(bot, update):
     else:
         sendNotAuthorizedMessage(bot,update)
 
+def restart(bot, update):
+    if update.message.from_user.id in sudo_users:
+         bot.sendMessage(update.message.chat_id, "Bot is restarting...")
+         time.sleep(0.2)
+         os.execl(sys.executable, sys.executable, *sys.argv)
+     else:
+         bot.sendMessage(update.message.chat_id, "Ummm, nope.")
+
+
 def sendNotAuthorizedMessage(bot, update):
     bot.sendChatAction(chat_id=update.message.chat_id,
                         action=ChatAction.TYPING)
@@ -94,6 +107,7 @@ def isAuthorized(update):
 
 buildHandler = CommandHandler('build', build)
 uploadHandler = CommandHandler('upload', upload)
+restartHandler = CommandHandler('restart', restart)
 derpHandler = CommandHandler('derp', derp)
 pizzaHandler = CommandHandler('pizzaplz', pizza)
 helpHandler = CommandHandler('help', help)
@@ -102,6 +116,7 @@ mmlHandler = CommandHandler('mml', mml)
 
 dispatcher.add_handler(buildHandler)
 dispatcher.add_handler(uploadHandler)
+dispatcher.add_handler(restartHandler)
 dispatcher.add_handler(derpHandler)
 dispatcher.add_handler(pizzaHandler)
 dispatcher.add_handler(helpHandler)
