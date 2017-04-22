@@ -65,15 +65,23 @@ def meh(bot, update):
 						action=ChatAction.TYPING)
 	bot.sendMessage(chat_id=update.message.chat_id,
 					text="Staph durpeeng")
+	
+def pizza(bot, update):
+	bot.sendChatAction(chat_id=update.message.chat_id,
+						action=ChatAction.TYPING)
+	bot.sendMessage(chat_id=update.message.chat_id,
+					text="@akhilnarang, stop eating so much pizza")
 
 
 build_handler = CommandHandler('build', build)
 upload_handler = CommandHandler('upload', upload)
 mehHandler = CommandHandler('derp', meh)
+pizzaHandler = CommandHandler('pizza', pizza) 
 
 dispatcher.add_handler(build_handler)
 dispatcher.add_handler(upload_handler)
 dispatcher.add_handler(mehHandler)
+dispatcher.add_handler(pizzaHandler)
 
 updater.start_polling()
 updater.idle()
