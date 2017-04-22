@@ -28,14 +28,16 @@ def build(bot, update):
         bot.sendChatAction(chat_id=update.message.chat_id,
                            action=ChatAction.TYPING)
         bot.sendMessage(chat_id=update.message.chat_id,
-                        text="Building and uploading to the chat")
+                        text="Building")
         os.chdir(path)
         build_command = ['./scripts/bacon.sh']
         subprocess.call(build_command)
-        filename = "/tmp/randomness-bacon.zip";
-        bot.sendDocument(
-            document=open(filename, "rb"),
-            chat_id=update.message.chat_id)
+        if os.path.exists("/tmp/randomness-bacon.zip"):
+        	bot.sendMessage(chat_id=update.message.chat_id,
+        					text="Build done, use /upload if you want zip")
+        else:
+        	bot.sendMessage(chat_id=update.message.chat_id,
+        					text="RIP, Build failed LMAO")
     else:
         sendNotAuthorizedMessage(bot, update)
 
@@ -52,18 +54,26 @@ def upload(bot, update):
     else:
         sendNotAuthorizedMessage(bot,update)
 
-def sendNotAuthorizedMessage(bot,update):
+def sendNotAuthorizedMessage(bot, update):
     bot.sendChatAction(chat_id=update.message.chat_id,
                         action=ChatAction.TYPING)
     bot.sendMessage(chat_id=update.message.chat_id,
                     text="You aren't authorized for this lulz")
 
+def meh(bot, update):
+	bot.sendChatAction(chat_id=update.message.chat_id,
+						action=ChatAction.TYPING)
+	bot.sendMessage(chat_id=update.message.chat_id,
+					text="Staph durpeeng")
+
 
 build_handler = CommandHandler('build', build)
 upload_handler = CommandHandler('upload', upload)
+mehHandler = CommandHandler('derp', meh)
 
 dispatcher.add_handler(build_handler)
 dispatcher.add_handler(upload_handler)
+dispatcher.add_handler(mehHandler)
 
 updater.start_polling()
 updater.idle()
