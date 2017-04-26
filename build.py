@@ -24,6 +24,7 @@ config.read('bot.ini')
 updater = Updater(token=config['KEYS']['bot_api'])
 path = config['PATH']['path']
 sudo_users = json.loads(config['ADMIN']['sudo'])
+aosip_token = config['JENKINS']['aosip']
 dispatcher = updater.dispatcher
 
 def build(bot, update):
@@ -110,6 +111,15 @@ def mml(bot, update):
 	bot.sendMessage(chat_id=update.message.chat_id,
 						text="No u @" + update.message.from_user.username)
 
+def aosip(bot, update):
+	if isAuthorized(update):
+		bot.sendChatAction(update.message.chat_id, ChatAction.TYPING)
+		bot.sendMessage(update.message.chat_id, "Starting bacon build as requested by @" + update.message.from_user.username + "!")
+		build_command = ['curl', '-s' , 'http://jenkins.akhilnarang.me/job/build?token=', aosip_token]
+		subprocess.call(build_command)
+	else:
+		sendNotAuthorizedMessage(bot, update)
+
 def isAuthorized(update):
 	return update.message.from_user.id in sudo_users
 
@@ -122,6 +132,7 @@ pizzaHandler = CommandHandler('pizzaplz', pizza)
 helpHandler = CommandHandler('help', help)
 lazyHandler = CommandHandler('lazyaf', lazy)
 mmlHandler = CommandHandler('mml', mml)
+aosipHandler = CommandHandler('aosip', aosip)
 
 dispatcher.add_handler(buildHandler)
 dispatcher.add_handler(uploadHandler)
@@ -132,6 +143,7 @@ dispatcher.add_handler(pizzaHandler)
 dispatcher.add_handler(helpHandler)
 dispatcher.add_handler(lazyHandler)
 dispatcher.add_handler(mmlHandler)
+dispatcher.add_handler(aosipHandler)
 
 updater.start_polling()
 updater.idle()
