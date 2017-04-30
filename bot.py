@@ -78,8 +78,8 @@ def leave(bot, update):
 def sendNotAuthorizedMessage(bot, update):
     bot.sendChatAction(chat_id=update.message.chat_id,
                         action=ChatAction.TYPING)
-    bot.sendMessage(chat_id=update.message.chat_id,
-                    text="You aren't authorized for this lulz @" + update.message.from_user.username)
+    bot.sendMessage(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id,
+                    text="You aren't authorized for this lulz!")
 
 def help(bot, update):
     bot.sendChatAction(update.message.chat_id, ChatAction.TYPING)
