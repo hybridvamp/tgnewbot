@@ -50,7 +50,7 @@ def upload(bot, update):
                             action=ChatAction.TYPING)
         bot.sendMessage(chat_id=update.message.chat_id,
                         text="Uploading to the chat")
-        filename = "/tmp/randomness-bacon.zip"
+        filename = "/tmp/IllusionKernel-bacon.zip"
         bot.sendDocument(
             document=open(filename, "rb"),
             chat_id=update.message.chat_id)
