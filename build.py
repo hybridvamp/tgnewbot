@@ -24,7 +24,6 @@ config.read('bot.ini')
 updater = Updater(token=config['KEYS']['bot_api'])
 path = config['PATH']['path']
 sudo_users = json.loads(config['ADMIN']['sudo'])
-aosip_token = config['JENKINS']['aosip']
 dispatcher = updater.dispatcher
 
 def build(bot, update):
@@ -36,7 +35,7 @@ def build(bot, update):
         os.chdir(path)
         build_command = ['./scripts/bacon.sh']
         subprocess.call(build_command)
-        if os.path.exists("/tmp/randomness-bacon.zip"):
+        if os.path.exists("/tmp/IllusionKernel-bacon.zip"):
         	bot.sendMessage(chat_id=update.message.chat_id,
         					text="Build done, use /upload if you want zip")
         else:
@@ -81,44 +80,12 @@ def sendNotAuthorizedMessage(bot, update):
     bot.sendMessage(chat_id=update.message.chat_id,
                     text="You aren't authorized for this lulz @" + update.message.from_user.username)
 
-def derp(bot, update):
-	bot.sendChatAction(chat_id=update.message.chat_id,
-						action=ChatAction.TYPING)
-	bot.sendMessage(chat_id=update.message.chat_id,
-					text="@" + update.message.from_user.username + " staph durpeeng")
-
-def pizza(bot, update):
-	bot.sendChatAction(chat_id=update.message.chat_id,
-						action=ChatAction.TYPING)
-	bot.sendMessage(chat_id=update.message.chat_id,
-				text="Somone give @" + update.message.from_user.username + " pizza pl0x")
-
 def help(bot, update):
 	bot.sendChatAction(chat_id=update.message.chat_id,
 						action=ChatAction.TYPING)
 	bot.sendMessage(chat_id=update.message.chat_id,
-				text="@" + update.message.from_user.username + ", here is some help for you.\n/build,\n/upload,\n/derp,\n/pizzaplz,\n/mml,\n/lazyaf,\n/restart,\n/leave, and\n/help for this menu.")
+				text="@" + update.message.from_user.username + ", here is some help for you.\n/build,\n/upload,\n/restart,\n/leave, and\n/help for this menu.")
 
-def lazy(bot, update):
-	bot.sendChatAction(chat_id=update.message.chat_id,
-						action=ChatAction.TYPING)
-	bot.sendMessage(chat_id=update.message.chat_id,
-						text="@" +  update.message.from_user.username + " is too lazy to do whatever he/she was told to do!")
-
-def mml(bot, update):
-	bot.sendChatAction(chat_id=update.message.chat_id,
-						action=ChatAction.TYPING)
-	bot.sendMessage(chat_id=update.message.chat_id,
-						text="No u @" + update.message.from_user.username)
-
-def aosip(bot, update):
-	if isAuthorized(update):
-		bot.sendChatAction(update.message.chat_id, ChatAction.TYPING)
-		bot.sendMessage(update.message.chat_id, "Starting bacon build as requested by @" + update.message.from_user.username + "!")
-		build_command = ['curl', '-s' , 'http://jenkins.akhilnarang.me/job/build?token=', aosip_token]
-		subprocess.call(build_command)
-	else:
-		sendNotAuthorizedMessage(bot, update)
 
 def isAuthorized(update):
 	return update.message.from_user.id in sudo_users
@@ -127,23 +94,13 @@ buildHandler = CommandHandler('build', build)
 uploadHandler = CommandHandler('upload', upload)
 restartHandler = CommandHandler('restart', restart)
 leaveHandler = CommandHandler('leave', leave)
-derpHandler = CommandHandler('derp', derp)
-pizzaHandler = CommandHandler('pizzaplz', pizza)
 helpHandler = CommandHandler('help', help)
-lazyHandler = CommandHandler('lazyaf', lazy)
-mmlHandler = CommandHandler('mml', mml)
-aosipHandler = CommandHandler('aosip', aosip)
 
 dispatcher.add_handler(buildHandler)
 dispatcher.add_handler(uploadHandler)
 dispatcher.add_handler(restartHandler)
 dispatcher.add_handler(leaveHandler)
-dispatcher.add_handler(derpHandler)
-dispatcher.add_handler(pizzaHandler)
 dispatcher.add_handler(helpHandler)
-dispatcher.add_handler(lazyHandler)
-dispatcher.add_handler(mmlHandler)
-dispatcher.add_handler(aosipHandler)
 
 updater.start_polling()
 updater.idle()
