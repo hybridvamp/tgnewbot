@@ -110,6 +110,18 @@ def push(bot, update):
     else:
         sendNotAuthorizedMessage(bot, update)
 
+def id(bot, update):
+    username=str(update.message.from_user.username)
+    userid=str(update.message.from_user.id)
+    chatid=str(update.message.chat_id)
+    bot.sendChatAction(update.message.chat_id, ChatAction.TYPING)
+    time.sleep(1)
+    try:
+        bot.sendMessage(update.message.chat_id, text="ID of @" + username + " is " +userid, reply_to_message_id=update.message.reply_to_message.message_id)
+    except AttributeError:
+        bot.sendMessage(update.message.chat_id, text="ID of this group is " + chatid, reply_to_message_id=update.message.message_id)
+
+
 def trigger_characters(bot, update):
     try:
         msg=str(update.message.text).lower()
@@ -130,6 +142,7 @@ helpHandler = CommandHandler('help', help)
 idHandler = CommandHandler('id', id)
 pullHandler = CommandHandler('pull', pull)
 pushHandler = CommandHandler('push', push)
+idHandler = CommandHandler('id', id)
 
 dispatcher.add_handler(buildHandler)
 dispatcher.add_handler(uploadHandler)
@@ -139,7 +152,7 @@ dispatcher.add_handler(helpHandler)
 dispatcher.add_handler(idHandler)
 dispatcher.add_handler(pullHandler)
 dispatcher.add_handler(pushHandler)
-
+dispatcher.add_handler(idHandler)
 dispatcher.add_handler(MessageHandler(Filters.text, trigger_characters))
 
 updater.start_polling()
