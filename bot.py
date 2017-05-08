@@ -134,6 +134,15 @@ def trigger_characters(bot, update):
     except UnicodeEncodeError:
         pass
 
+def get_admin_ids(bot, chat_id):
+    return [admin.user.id for admin in bot.getChatAdministrators(chat_id)]
+
+def kick(bot, update):
+    if update.message.from_user.id in get_admin_ids(bot, update.message.chat_id):
+        bot.kickChatMember(update.message.chat_id, update.message.reply_to_message.from_user.id)
+    else:
+        update.message.reply_text("Meh")
+
 buildHandler = CommandHandler('build', build)
 uploadHandler = CommandHandler('upload', upload)
 restartHandler = CommandHandler('restart', restart)
@@ -143,6 +152,7 @@ idHandler = CommandHandler('id', id)
 pullHandler = CommandHandler('pull', pull)
 pushHandler = CommandHandler('push', push)
 idHandler = CommandHandler('id', id)
+kickHandler = CommandHandler('kick', kick)
 
 dispatcher.add_handler(buildHandler)
 dispatcher.add_handler(uploadHandler)
@@ -153,6 +163,7 @@ dispatcher.add_handler(idHandler)
 dispatcher.add_handler(pullHandler)
 dispatcher.add_handler(pushHandler)
 dispatcher.add_handler(idHandler)
+dispatcher.add_handler(kickHandler)
 dispatcher.add_handler(MessageHandler(Filters.text, trigger_characters))
 
 updater.start_polling()
