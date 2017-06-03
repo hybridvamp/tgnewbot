@@ -142,6 +142,11 @@ def kick(bot, update):
     else:
         update.message.reply_text("Meh")
 
+def shrug(bot, update):
+    bot.sendChatAction(update.message.chat_id, ChatAction.TYPING)
+    time.sleep(1)
+    bot.sendMessage(update.message.chat_id, reply_to_message_id=update.message.message_id, text="¯\_(ツ)_/¯")
+
 buildHandler = CommandHandler('build', build)
 uploadHandler = CommandHandler('upload', upload)
 restartHandler = CommandHandler('restart', restart)
@@ -152,6 +157,7 @@ pullHandler = CommandHandler('pull', pull)
 pushHandler = CommandHandler('push', push)
 idHandler = CommandHandler('id', id)
 kickHandler = CommandHandler('kick', kick)
+shrugHandler = CommandHandler('shrug', shrug)
 
 dispatcher.add_handler(buildHandler)
 dispatcher.add_handler(uploadHandler)
@@ -163,6 +169,7 @@ dispatcher.add_handler(pullHandler)
 dispatcher.add_handler(pushHandler)
 dispatcher.add_handler(idHandler)
 dispatcher.add_handler(kickHandler)
+dispatcher.add_handler(shrugHandler)
 dispatcher.add_handler(MessageHandler(Filters.text, trigger_characters))
 
 updater.start_polling()
