@@ -111,16 +111,15 @@ def push(bot, update):
         sendNotAuthorizedMessage(bot, update)
 
 def id(bot, update):
-    username=str(update.message.from_user.username)
-    userid=str(update.message.from_user.id)
     chatid=str(update.message.chat_id)
-    bot.sendChatAction(update.message.chat_id, ChatAction.TYPING)
-    time.sleep(1)
     try:
+        username=str(update.message.reply_to_message.from_user.username)
+        userid=str(update.message.reply_to_message.from_user.id)
+        bot.sendChatAction(update.message.chat_id, ChatAction.TYPING)
+        time.sleep(1)
         bot.sendMessage(update.message.chat_id, text="ID of @" + username + " is " +userid, reply_to_message_id=update.message.reply_to_message.message_id)
     except AttributeError:
         bot.sendMessage(update.message.chat_id, text="ID of this group is " + chatid, reply_to_message_id=update.message.message_id)
-
 
 def trigger_characters(bot, update):
     try:
