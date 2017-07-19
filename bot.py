@@ -45,7 +45,7 @@ def build(bot, update):
 #            build_command = ['cd', '~/nougat-mr2','&&', 'bash aosip.sh', '%s' % device, 'clean,sync']
 #            subprocess.call(build_command)
             bot.sendMessage(update.message.chat_id, "Building for %s" % device)
-            os.system('bash aosip.sh %s clean,sync' % device)
+            os.system('bash aosip.sh %s clean,sync %s' % (device, update.message.chat_id))
     else:
         sendNotAuthorizedMessage(bot, update)
 
