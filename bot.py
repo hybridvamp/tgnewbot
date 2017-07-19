@@ -34,17 +34,18 @@ def build(bot, update):
     if isAuthorized(update):
         bot.sendChatAction(chat_id=update.message.chat_id,
                            action=ChatAction.TYPING)
-        bot.sendMessage(chat_id=update.message.chat_id,
-                        text="Building")
         os.chdir(path)
-        build_command = ['./scripts/bacon.sh']
-        subprocess.call(build_command)
-        if os.path.exists("/tmp/IllusionKernel-bacon.zip"):
-        	bot.sendMessage(chat_id=update.message.chat_id,
-        					text="Build done, use /upload if you want zip")
+        device=update.message.text.split(' ')[1]
+        if device is None:
+            device='oneplus3'
+
+        if not os.path.exists('vendor/aosip/products/aosip_%s.mk' % device):
+            bot.sendMessage(update.message.chat_id, "%s isn't an AOSiP device" % device)
         else:
-        	bot.sendMessage(chat_id=update.message.chat_id,
-        					text="RIP, Build failed LMAO")
+#            build_command = ['cd', '~/nougat-mr2','&&', 'bash aosip.sh', '%s' % device, 'clean,sync']
+#            subprocess.call(build_command)
+            bot.sendMessage(update.message.chat_id, "Building for %s" % device)
+            os.system('bash aosip.sh %s clean,sync' % device)
     else:
         sendNotAuthorizedMessage(bot, update)
 
@@ -133,6 +134,8 @@ def trigger_characters(bot, update):
             mod_command=msg.replace("#", "")
             eval(mod_command)(bot, update)
     except UnicodeEncodeError:
+        pass
+    except NameError:
         pass
 
 def get_admin_ids(bot, chat_id):
