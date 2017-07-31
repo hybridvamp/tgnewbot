@@ -35,32 +35,31 @@ def build(bot, update):
         bot.sendChatAction(chat_id=update.message.chat_id,
                            action=ChatAction.TYPING)
         os.chdir(path)
-        device=update.message.text.split(' ')[1]
-        if device is None:
-            device='oneplus3'
-
-        if not os.path.exists('vendor/aosip/products/aosip_%s.mk' % device):
-            bot.sendMessage(update.message.chat_id, "%s isn't an AOSiP device" % device)
-        else:
-#            build_command = ['cd', '~/nougat-mr2','&&', 'bash aosip.sh', '%s' % device, 'clean,sync']
-#            subprocess.call(build_command)
-            bot.sendMessage(update.message.chat_id, "Building for %s" % device)
-            os.system('bash aosip.sh %s clean,sync %s' % (device, update.message.chat_id))
+        bot.sendMessage(update.message.chat_id, "Building!")
+        os.system('bash aosip.sh %s %s' % (update.message.chat_id, update.message.text))
     else:
         sendNotAuthorizedMessage(bot, update)
 
-def upload(bot, update):
+def sync(bot, update):
     if isAuthorized(update):
-        bot.sendChatAction(chat_id=update.message.chat_id,
-                            action=ChatAction.TYPING)
-        bot.sendMessage(chat_id=update.message.chat_id,
-                        text="Uploading to the chat")
-        filename = "/tmp/IllusionKernel-bacon.zip"
-        bot.sendDocument(
-            document=open(filename, "rb"),
-            chat_id=update.message.chat_id)
+        bot.sendMessage(update.message.chat_id, text="Starting repo sync")
+        os.system("bash ~/Kronicbot/sync.sh %s" % update.message.chat_id)
     else:
-        sendNotAuthorizedMessage(bot,update)
+        sendNotAuthorizedMessage(bot, update)
+
+def pick(bot, update):
+    if isAuthorized(update):
+        bot.sendMessage(update.message.chat_id, text="Picking stuff")
+        os.system("bash ~/Kronicbot/pick.sh %s %s" % (update.message.chat_id, update.message.text))
+    else:
+        sendNotAuthorizedMessage(bot, update)
+
+def clean(bot, update):
+    if isAuthorized(update):
+        bot.sendMessage(update.message.chat_id, text="Cleaning")
+        os.system("bash ~/Kronicbot/clean.sh %s" % update.message.chat_id)
+    else:
+        sendNotAuthorizedMessage(bot, update)
 
 def restart(bot, update):
     if isAuthorized(update):
@@ -162,7 +161,7 @@ def mirror(bot, update):
         bot.sendDocument(update.message.chat_id, open(output, 'rb'))
         os.chdir('/home/akhil/Kronicbot/upload')
         subprocess.call(['rm', '-rfv', file])
-        os.chdir('/home/akhil/Kronicbot/tsbot')
+        os.chdir('/home/akhil/Kronicbot/')
     else:
         sendNotAuthorizedMessage(bot, update)
 
@@ -176,7 +175,6 @@ def getlog(bot, update):
 
 
 buildHandler = CommandHandler('build', build)
-uploadHandler = CommandHandler('upload', upload)
 restartHandler = CommandHandler('restart', restart)
 leaveHandler = CommandHandler('leave', leave)
 helpHandler = CommandHandler('help', help)
@@ -186,9 +184,11 @@ pushHandler = CommandHandler('push', push)
 idHandler = CommandHandler('id', id)
 kickHandler = CommandHandler('kick', kick)
 shrugHandler = CommandHandler('shrug', shrug)
+syncHandler = CommandHandler('sync', sync)
+pickHandler = CommandHandler('pick', pick)
+cleanHandler = CommandHandler('clean', clean)
 
 dispatcher.add_handler(buildHandler)
-dispatcher.add_handler(uploadHandler)
 dispatcher.add_handler(restartHandler)
 dispatcher.add_handler(leaveHandler)
 dispatcher.add_handler(helpHandler)
@@ -198,6 +198,9 @@ dispatcher.add_handler(pushHandler)
 dispatcher.add_handler(idHandler)
 dispatcher.add_handler(kickHandler)
 dispatcher.add_handler(shrugHandler)
+dispatcher.add_handler(syncHandler)
+dispatcher.add_handler(pickHandler)
+dispatcher.add_handler(cleanHandler)
 dispatcher.add_handler(MessageHandler(Filters.text, trigger_characters))
 
 updater.start_polling()
