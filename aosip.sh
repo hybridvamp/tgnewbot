@@ -3,11 +3,13 @@
 cd ~/src;
 
 export CHAT_ID=$1
-export DEVICE=$2
+export DEVICE=$3
+shift;
+shift;
 shift;
 
 if [ ! -f "vendor/aosip/products/aosip_$DEVICE.mk" ]; then
-    bash ~/Kronicbot/send_tg.sh "$CHAT_ID $DEVICE is not an AOSiP Device!";
+    bash ~/Kronicbot/send_tg.sh $CHAT_ID "$DEVICE is not an AOSiP Device!";
     exit 1;
 fi
 

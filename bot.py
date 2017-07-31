@@ -36,7 +36,7 @@ def build(bot, update):
                            action=ChatAction.TYPING)
         os.chdir(path)
         bot.sendMessage(update.message.chat_id, "Building!")
-        os.system('bash aosip.sh %s %s' % (update.message.chat_id, update.message.text))
+        os.system('cd ~/src && bash aosip.sh %s %s' % (update.message.chat_id, update.message.text))
     else:
         sendNotAuthorizedMessage(bot, update)
 
