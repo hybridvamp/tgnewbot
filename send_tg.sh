@@ -1,4 +1,4 @@
-source .botcreds
+source ~/Kronicbot/.botcreds
 export CHAT_ID="$1"
 shift;
 
