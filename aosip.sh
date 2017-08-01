@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+source /etc/profile.d/login.sh
 cd ~/src;
 
 export CHAT_ID=$1
