@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-source /etc/profile.d/login.sh
 cd ~/src;
 
 export CHAT_ID=$1
@@ -65,5 +64,5 @@ else
   bash ~/Kronicbot/send_tg.sh ${CHAT_ID} "Failed: ${DEVICE} ${AOSIP_BUILDTYPE}"
 fi
 
-stopjack;
+./prebuilts/sdk/tools/jack-admin kill-server
 cd ~/Kronicbot
