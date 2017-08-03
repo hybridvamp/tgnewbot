@@ -58,6 +58,8 @@ if [ $? -eq 0 ]; then
   rsync -av "${AOSIP_ZIP}" "kronic@skylake.aosiprom.com:aosiprom.com/kronic/Builds/${DEVICE}/";
   cd -;
   DOWNLOAD_URL="http://aosiprom.com/kronic/Builds/${DEVICE}/${AOSIP_ZIP}";
+  echo $DOWNLOAD_URL
+  bash ~/Kronicbot/send_tg.sh $CHAT_ID Done
   bash ~/Kronicbot/send_tg.sh ${CHAT_ID} "[$AOSIP_ZIP](${DOWNLOAD_URL})"
 else
   bash ~/Kronicbot/send_tg.sh ${CHAT_ID} "Failed: ${DEVICE} ${AOSIP_BUILDTYPE}"
