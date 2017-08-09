@@ -89,9 +89,6 @@ def inlinequery(bot, update):
 
     bot.answerInlineQuery(update.inline_query.id, results=results, cache_time=10)
 
-def isAuthorized(update):
-    return update.message.from_user.id == int(sudo_users)
-
 def sendNotAuthorizedMessage(bot, update):
     bot.sendChatAction(chat_id=update.message.chat_id,
                         action=ChatAction.TYPING)
