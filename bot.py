@@ -9,12 +9,9 @@ import subprocess
 import time
 
 import sys
-
-from telegram import ChatAction
-from telegram.ext import CommandHandler
-from telegram.ext import Filters
-from telegram.ext import MessageHandler
-from telegram.ext import Updater
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, InlineQueryHandler
+from telegram import InlineQueryResultArticle, ChatAction, InputTextMessageContent
+from uuid import uuid4
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -77,6 +74,20 @@ def leave(bot, update):
         bot.leaveChat(update.message.chat_id)
     else:
         sendNotAuthorizedMessage(bot, update)
+
+def inlinequery(bot, update):
+    query = update.inline_query.query
+    o = execute(query, update, direct=False)
+    results = list()
+
+    results.append(InlineQueryResultArticle(id=uuid4(),
+                                            title=query,
+                                            description=o,
+                                            input_message_content=InputTextMessageContent(
+                                                '*{0}*\n\n{1}'.format(query, o),
+                                                parse_mode="Markdown")))
+
+    bot.answerInlineQuery(update.inline_query.id, results=results, cache_time=10)
 
 def sendNotAuthorizedMessage(bot, update):
     bot.sendChatAction(chat_id=update.message.chat_id,
@@ -202,6 +213,7 @@ dispatcher.add_handler(shrugHandler)
 dispatcher.add_handler(syncHandler)
 dispatcher.add_handler(pickHandler)
 dispatcher.add_handler(cleanHandler)
+dispatcher.add_handler(InlineQueryHandler(inlinequery))
 dispatcher.add_handler(MessageHandler(Filters.text, trigger_characters))
 
 updater.start_polling()
