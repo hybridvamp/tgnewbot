@@ -25,7 +25,7 @@ config.read('bot.ini')
 
 updater = Updater(token=config['KEYS']['bot_api'])
 path = config['PATH']['path']
-sudo_users = json.loads(config['ADMIN']['sudo'])
+sudo_users = [138554855,92027269]
 dispatcher = updater.dispatcher
 
 logfile = '/home/akhil/Kronicbot/log'

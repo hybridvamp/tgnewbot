@@ -54,7 +54,7 @@ time mka kronic
 if [ $? -eq 0 ]; then
   cd $OUT
   AOSIP_ZIP="$(ls AOSiP*.zip)";
-  rsync -av "${AOSIP_ZIP}" "kronic@skylake.aosiprom.com:aosiprom.com/kronic/Builds/${DEVICE}/";
+  rsync -av "${AOSIP_ZIP}" "/home/kronic/aosiprom.com/kronic/Builds/${DEVICE}/";
   cd -;
   DOWNLOAD_URL="http://aosiprom.com/kronic/Builds/${DEVICE}/${AOSIP_ZIP}";
   echo $DOWNLOAD_URL
