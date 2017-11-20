@@ -25,8 +25,6 @@ path = config['PATH']['path']
 sudo_users = [138554855,92027269]
 dispatcher = updater.dispatcher
 
-logfile = '/home/akhil/Kronicbot/log'
-
 def build(bot, update):
     if isAuthorized(update):
         bot.sendChatAction(chat_id=update.message.chat_id,
@@ -154,37 +152,18 @@ def get_admin_ids(bot, chat_id):
 
 def kick(bot, update):
     if update.message.from_user.id in get_admin_ids(bot, update.message.chat_id):
-        bot.kickChatMember(update.message.chat_id, update.message.reply_to_message.from_user.id)
+        try:
+            bot.kickChatMember(update.message.chat_id, update.message.reply_to_message.from_user.id)
+            bot.sendMessage(update.message.chat_id, update.message.reply_to_message.from_user.first_name+ " kicked!")
+        except AttributeError:
+            bot.sendMessage(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text="Please quote a user to kick!")
     else:
-        update.message.reply_text("Meh")
+        update.message.reply_text("Meh, you no haz no powah here!")
 
 def shrug(bot, update):
     bot.sendChatAction(update.message.chat_id, ChatAction.TYPING)
     time.sleep(1)
     bot.sendMessage(update.message.chat_id, reply_to_message_id=update.message.message_id, text="¯\_(ツ)_/¯")
-
-def mirror(bot, update):
-    if isAuthorized(update):
-        msg=update.message.text
-        link=msg.split(' ')[1]
-        file=msg.split(' ')[2]
-        output='upload/' + file
-        subprocess.call(['wget', link, '-O', output])
-        bot.sendDocument(update.message.chat_id, open(output, 'rb'))
-        os.chdir('/home/akhil/Kronicbot/upload')
-        subprocess.call(['rm', '-rfv', file])
-        os.chdir('/home/akhil/Kronicbot/')
-    else:
-        sendNotAuthorizedMessage(bot, update)
-
-def clearlog(bot, update):
-    if isAuthorized(update):
-        subprocess.call(['rm', '-fv', logfile])
-        bot.sendMessage(update.message.chat_id, "Cleared logs.")
-
-def getlog(bot, update):
-    bot.sendDocument(update.message.chat_id, open(logfile, 'rb'))
-
 
 buildHandler = CommandHandler('build', build)
 restartHandler = CommandHandler('restart', restart)
