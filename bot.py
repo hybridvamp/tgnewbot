@@ -151,14 +151,14 @@ def get_admin_ids(bot, chat_id):
     return [admin.user.id for admin in bot.getChatAdministrators(chat_id)]
 
 def kick(bot, update):
-    if update.message.from_user.id in get_admin_ids(bot, update.message.chat_id):
-        try:
+    try:
+        if update.message.from_user.id in get_admin_ids(bot, update.message.chat_id) and update.message.reply_to_message.from_user.id not in get_admin_ids(bot, update.message.chat_id):
             bot.kickChatMember(update.message.chat_id, update.message.reply_to_message.from_user.id)
             bot.sendMessage(update.message.chat_id, update.message.reply_to_message.from_user.first_name+ " kicked!")
-        except AttributeError:
+        else:
+            update.message.reply_text("Meh, either you're not an admin or the quoted user is one!")
+    except AttributeError:
             bot.sendMessage(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text="Please quote a user to kick!")
-    else:
-        update.message.reply_text("Meh, you no haz no powah here!")
 
 def shrug(bot, update):
     bot.sendChatAction(update.message.chat_id, ChatAction.TYPING)
