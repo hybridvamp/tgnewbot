@@ -153,8 +153,8 @@ def get_admin_ids(bot, chat_id):
 def kick(bot, update):
     chat=update.message.chat_id
     try:
-	sender=update.message.from_user.id
-	quoted=update.message.reply_to_message.from_user.id
+        sender=update.message.from_user.id
+        quoted=update.message.reply_to_message.from_user.id
         if sender in get_admin_ids(bot, chat) and quoted not in get_admin_ids(bot, chat):
             bot.kickChatMember(chat, quoted)
             bot.unbanChatMember(chat, quoted)
@@ -165,10 +165,10 @@ def kick(bot, update):
             update.message.reply_text(reply_to_message_id=update.message.message_id, text="Please quote a user to kick!")
 
 def ban(bot, update):
-	chat=update.message.chat_id
+    chat=update.message.chat_id
     try:
-	sender=update.message.from_user.id
-	quoted=update.message.reply_to_message.from_user.id
+        sender=update.message.from_user.id
+        quoted=update.message.reply_to_message.from_user.id
         if sender in get_admin_ids(bot, chat) and quoted not in get_admin_ids(bot, chat):
             bot.kickChatMember(chat, quoted)
             update.message.reply_text(update.message.reply_to_message.from_user.first_name+ " cannot join back now!")
@@ -178,10 +178,10 @@ def ban(bot, update):
             update.message.reply_text(reply_to_message_id=update.message.message_id, text="Please quote a user to ban!")
 
 def unban(bot, update):
-	chat=update.message.chat_id
+    chat=update.message.chat_id
     try:
-	sender=update.message.from_user.id
-	quoted=update.message.reply_to_message.from_user.id
+        sender=update.message.from_user.id
+        quoted=update.message.reply_to_message.from_user.id
         if sender in get_admin_ids(bot, chat) and quoted not in get_admin_ids(bot, chat):
             bot.unbanChatMember(chat, quoted)
             update.message.reply_text(update.message.reply_to_message.from_user.first_name+ " can join this chat now!")
@@ -193,8 +193,8 @@ def unban(bot, update):
 def mute(bot, update):
     chat=update.message.chat_id
     try:
-	sender=update.message.from_user.id
-	quoted=update.message.reply_to_message.from_user.id
+        sender=update.message.from_user.id
+        quoted=update.message.reply_to_message.from_user.id
         if sender in get_admin_ids(bot, chat) and quoted not in get_admin_ids(bot, chat):
             bot.restrictChatMember(chat, quoted, can_send_messages=False, can_send_media_messages=False, can_send_other_messages=False, can_add_web_page_previews=False)
             update.message.reply_text(update.message.reply_to_message.from_user.first_name+ " cannot speak now!")
@@ -206,8 +206,8 @@ def mute(bot, update):
 def unmute(bot, update):
     chat=update.message.chat_id
     try:
-	sender=update.message.from_user.id
-	quoted=update.message.reply_to_message.from_user.id
+        sender=update.message.from_user.id
+        quoted=update.message.reply_to_message.from_user.id
         if sender in get_admin_ids(bot, chat) and quoted not in get_admin_ids(bot, chat):
             bot.restrictChatMember(chat, quoted, can_send_messages=True, can_send_media_messages=True, can_send_other_messages=True, can_add_web_page_previews=True)
             update.message.reply_text(update.message.reply_to_message.from_user.first_name+ " can speak now!")
