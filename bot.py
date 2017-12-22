@@ -257,7 +257,6 @@ dispatcher.add_handler(unbanHandler)
 dispatcher.add_handler(muteHandler)
 dispatcher.add_handler(unmuteHandler)
 dispatcher.add_handler(InlineQueryHandler(inlinequery))
-dispatcher.add_handler(MessageHandler(Filters.text, trigger_characters))
 
 updater.start_polling()
 updater.idle()
