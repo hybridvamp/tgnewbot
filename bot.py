@@ -9,8 +9,7 @@ import time
 from uuid import uuid4
 
 from telegram import InlineQueryResultArticle, ChatAction, InputTextMessageContent, Update
-from telegram.ext import Updater, CommandHandler, InlineQueryHandler
-from telegram.ext.handler import Handler
+from telegram.ext import Updater, CommandHandler, InlineQueryHandler, run_async
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -25,6 +24,7 @@ sudo_users = [138554855, 92027269]
 dispatcher = updater.dispatcher
 
 
+@run_async
 def build(bot, update):
     if is_authorized(update):
         bot.sendChatAction(chat_id=update.message.chat_id,
@@ -37,6 +37,7 @@ def build(bot, update):
         send_not_authorized_message(bot, update)
 
 
+@run_async
 def sync(bot, update):
     if is_authorized(update):
         bot.sendMessage(update.message.chat_id, text="Starting repo sync")
@@ -45,6 +46,7 @@ def sync(bot, update):
         send_not_authorized_message(bot, update)
 
 
+@run_async
 def pick(bot, update):
     if is_authorized(update):
         bot.sendMessage(update.message.chat_id, text="Picking stuff")
@@ -53,6 +55,7 @@ def pick(bot, update):
         send_not_authorized_message(bot, update)
 
 
+@run_async
 def clean(bot, update):
     if is_authorized(update):
         bot.sendMessage(update.message.chat_id, text="Cleaning")
@@ -61,15 +64,17 @@ def clean(bot, update):
         send_not_authorized_message(bot, update)
 
 
+# Not async because used by pull
 def restart(bot, update):
     if is_authorized(update):
         bot.sendMessage(update.message.chat_id, "Bot is restarting...")
         time.sleep(0.2)
         os.execl(sys.executable, sys.executable, *sys.argv)
     else:
-        send_not_authorized_message()
+        send_not_authorized_message(bot, update)
 
 
+@run_async
 def leave(bot, update):
     if is_authorized(update):
         bot.sendChatAction(update.message.chat_id, ChatAction.TYPING)
@@ -79,6 +84,7 @@ def leave(bot, update):
         send_not_authorized_message(bot, update)
 
 
+@run_async
 def inlinequery(bot, update):
     query = update.inline_query.query
     o = execute(query, update, direct=False)
@@ -101,6 +107,7 @@ def send_not_authorized_message(bot, update):
                     text="You aren't authorized for this lulz!")
 
 
+@run_async
 def help(bot, update):
     bot.sendChatAction(update.message.chat_id, ChatAction.TYPING)
     bot.sendMessage(update.message.chat_id, reply_to_message_id=update.message.message_id,
@@ -113,6 +120,7 @@ def is_authorized(update):
     return update.message.from_user.id in sudo_users
 
 
+@run_async
 def pull(bot, update):
     if is_authorized(update):
         bot.sendChatAction(update.message.chat_id, ChatAction.TYPING)
@@ -127,6 +135,7 @@ def pull(bot, update):
         send_not_authorized_message(bot, update)
 
 
+@run_async
 def push(bot, update):
     if is_authorized(update):
         subprocess.call(['git', 'push', 'origin', 'master', '--force'])
@@ -135,6 +144,7 @@ def push(bot, update):
         send_not_authorized_message(bot, update)
 
 
+@run_async
 def id(bot, update):
     chatid = str(update.message.chat_id)
     try:
@@ -149,25 +159,11 @@ def id(bot, update):
                         reply_to_message_id=update.message.message_id)
 
 
-def trigger_characters(bot, update):
-    try:
-        msg = str(update.message.text).lower()
-        if msg[0] == '!':
-            mod_command = msg.replace("!", "")
-            eval(mod_command)(bot, update)
-        elif msg[0] == '#':
-            mod_command = msg.replace("#", "")
-            eval(mod_command)(bot, update)
-    except UnicodeEncodeError:
-        pass
-    except NameError:
-        pass
-
-
 def get_admin_ids(bot, chat_id):
     return [admin.user.id for admin in bot.getChatAdministrators(chat_id)]
 
 
+@run_async
 def kick(bot, update):
     chat = update.message.chat_id
     try:
@@ -183,6 +179,7 @@ def kick(bot, update):
         update.message.reply_text(reply_to_message_id=update.message.message_id, text="Please quote a user to kick!")
 
 
+@run_async
 def ban(bot, update):
     chat = update.message.chat_id
     try:
@@ -197,6 +194,7 @@ def ban(bot, update):
         update.message.reply_text(reply_to_message_id=update.message.message_id, text="Please quote a user to ban!")
 
 
+@run_async
 def unban(bot, update):
     chat = update.message.chat_id
     try:
@@ -211,6 +209,7 @@ def unban(bot, update):
         update.message.reply_text(reply_to_message_id=update.message.message_id, text="Please quote a user to unban!")
 
 
+@run_async
 def mute(bot, update):
     chat = update.message.chat_id
     try:
@@ -226,6 +225,7 @@ def mute(bot, update):
         update.message.reply_text(reply_to_message_id=update.message.message_id, text="Please quote a user to mute!")
 
 
+@run_async
 def unmute(bot, update):
     chat = update.message.chat_id
     try:
@@ -241,6 +241,7 @@ def unmute(bot, update):
         update.message.reply_text(reply_to_message_id=update.message.message_id, text="Please quote a user to unmute!")
 
 
+@run_async
 def shrug(bot, update):
     bot.sendChatAction(update.message.chat_id, ChatAction.TYPING)
     time.sleep(1)
